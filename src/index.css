@@ -1385,3 +1385,161 @@ button {
 .mt-4 {
   margin-top: 2rem;
 }
+
+/* ===== DIALOG / MODAL STYLES ===== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 2000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modal-content {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 448px;
+  z-index: 2001;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.modal-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.modal-close-button {
+  color: #a0aec0;
+  transition: color 0.2s;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.modal-close-button:hover {
+  color: #718096;
+}
+
+.modal-body .space-y-6 > * + * {
+  margin-top: 1.5rem;
+}
+
+.modal-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.modal-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(139, 69, 19, 0.2);
+}
+
+.modal-button {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background-color 0.2s, transform 0.2s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 1px solid transparent;
+}
+
+.modal-button:hover {
+  transform: translateY(-2px);
+}
+
+.modal-button-primary {
+  background: var(--primary);
+  color: white;
+  border-color: var(--primary);
+}
+
+.modal-button-primary:hover {
+  background: var(--primary-dark);
+}
+
+.modal-button-secondary {
+  background: white;
+  color: #4a5568;
+  border-color: #e2e8f0;
+}
+
+.modal-button-secondary:hover {
+  background-color: #f7fafc;
+}
+
+.modal-separator {
+  position: relative;
+  text-align: center;
+}
+
+.modal-separator-line {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: #e2e8f0;
+  z-index: -1;
+}
+
+.modal-separator-text {
+  background-color: white;
+  padding: 0 1rem;
+  color: #718096;
+  font-size: 0.875rem;
+}
+
+.modal-body .text-lg {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--text-dark);
+}
+
+.modal-body .text-sm {
+  font-size: 0.875rem;
+  color: #718096;
+  text-align: center;
+}
+
+/* For accessibility, to hide description from view but not from screen readers */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}

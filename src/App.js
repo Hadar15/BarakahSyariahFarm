@@ -2,13 +2,17 @@
 import React from 'react';
 import './App.css';
 import HomePage from './views/HomePage';
+import { AuthProvider } from './contexts/AuthContext';
 
 function App() {
   return (
-    <div className="App">
-      <HomePage />
-    </div>
+    <AuthProvider>
+      <div className="App">
+        <HomePage />
+      </div>
+    </AuthProvider>
   );
 }
+
 export default App;
 
