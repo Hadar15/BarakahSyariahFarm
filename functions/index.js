@@ -1,32 +1,40 @@
 /**
- * Import function triggers from their respective submodules:
+ * The Cloud Functions for Firebase SDK to create Cloud Functions and set up triggers.
+ * This file uses the v2 SDK with Node.js 23 compatibility.
  *
- * const {onCall} = require("firebase-functions/v2/https");
- * const {onDocumentWritten} = require("firebase-functions/v2/firestore");
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
+ * @see https://firebase.google.com/docs/functions
  */
 
-const {setGlobalOptions} = require("firebase-functions");
-const {onRequest} = require("firebase-functions/https");
-const logger = require("firebase-functions/logger");
+const functions = require('firebase-functions');
+const admin = require('firebase-admin');
 
-// For cost control, you can set the maximum number of containers that can be
-// running at the same time. This helps mitigate the impact of unexpected
-// traffic spikes by instead downgrading performance. This limit is a
-// per-function limit. You can override the limit for each function using the
-// `maxInstances` option in the function's options, e.g.
-// `onRequest({ maxInstances: 5 }, (req, res) => { ... })`.
-// NOTE: setGlobalOptions does not apply to functions using the v1 API. V1
-// functions should each use functions.runWith({ maxInstances: 10 }) instead.
-// In the v1 API, each function can only serve one request per container, so
-// this will be the maximum concurrent request count.
-setGlobalOptions({ maxInstances: 10 });
+// Initialize the Firebase Admin SDK.
+// This is required to access Firestore.
+admin.initializeApp();
 
-// Create and deploy your first functions
-// https://firebase.google.com/docs/functions/get-started
+/**
+ * A Cloud Function that triggers whenever a new user is created in Firebase Authentication.
+ * It creates a corresponding user profile document in Firestore.
+ */
+exports.createUserProfile = functions.auth.user().onCreate(async (user) => {
+  const { email, uid, displayName, photoURL } = user;
 
-// exports.helloWorld = onRequest((request, response) => {
-//   logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
+  const userProfile = {
+    uid: uid,
+    email: email,
+    displayName: displayName || (email ? email.split('@')[0] : 'User'),
+    profileImage: photoURL || (email ? `https://api.dicebear.com/8.x/initials/svg?seed=${encodeURIComponent(email)}` : null),
+    createdAt: admin.firestore.FieldValue.serverTimestamp(),
+    updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+  };
+
+  const userDocRef = admin.firestore().collection('users').doc(uid);
+
+  try {
+    await userDocRef.set(userProfile);
+    console.log(`Successfully created Firestore profile for user: ${uid}`);
+  } catch (error) {
+    console.error(`Error creating Firestore profile for user: ${uid}`, error);
+  }
+  return null;
+});

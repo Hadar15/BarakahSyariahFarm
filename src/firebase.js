@@ -1,8 +1,9 @@
 // src/firebase.js
 import { initializeApp } from 'firebase/app';
-import { getFirestore } from 'firebase/firestore';
+import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
 import { 
   getAuth, 
+  connectAuthEmulator,
   signInWithEmailLink as firebaseSignInWithEmailLink, 
   sendSignInLinkToEmail, 
   isSignInWithEmailLink,
@@ -25,6 +26,12 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth(app);
+
+if (window.location.hostname === "localhost") {
+  console.log("Connecting to local Firebase emulators on new port");
+  connectAuthEmulator(auth, "http://localhost:9095");
+  connectFirestoreEmulator(db, 'localhost', 8080);
+}
 
 // Wrapper functions for authentication
 const sendEmailLink = async (email, actionCodeSettings = {}) => {

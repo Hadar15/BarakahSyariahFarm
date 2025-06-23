@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 
 const SignInModal = ({ isOpen, onClose }) => {
   const [email, setEmail] = useState('');
@@ -11,13 +12,11 @@ const SignInModal = ({ isOpen, onClose }) => {
     loading, 
     error, 
     sendSignInLink, 
-    signInWithLink, 
     signInWithGoogle, 
-    signOut, 
-    checkEmailLink,
-    getStoredEmail,
-    isAuthenticated 
+    isAuthenticated,
+    signOut 
   } = useAuth();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleEsc = (event) => {
@@ -31,28 +30,14 @@ const SignInModal = ({ isOpen, onClose }) => {
     };
   }, [onClose]);
 
-  useEffect(() => {
-    if (checkEmailLink()) {
-      const storedEmail = getStoredEmail();
-      if (storedEmail) {
-        signInWithLink(storedEmail)
-          .then(() => {
-            setMessage('Berhasil masuk!');
-            onClose();
-          })
-          .catch((err) => {
-            setMessage(`Error: ${err.message}`);
-          });
-      }
-    }
-  }, [checkEmailLink, getStoredEmail, signInWithLink, onClose]);
-
   const handleEmailSignIn = async (e) => {
     e.preventDefault();
     try {
+      window.localStorage.setItem('emailForSignIn', email);
       await sendSignInLink(email);
       setMessage('Link masuk telah dikirim ke email Anda!');
     } catch (err) {
+      window.localStorage.removeItem('emailForSignIn');
       setMessage(`Error: ${err.message}`);
     }
   };
@@ -62,6 +47,7 @@ const SignInModal = ({ isOpen, onClose }) => {
       await signInWithGoogle('popup');
       setMessage('Berhasil masuk dengan Google!');
       onClose();
+      navigate('/dashboard');
     } catch (err) {
       setMessage(`Error: ${err.message}`);
     }
