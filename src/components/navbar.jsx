@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { useAuth } from "../contexts/AuthContext"
 import SignInModal from "./SignInModal"
 
-export default function Navbar() {
+const Navbar = () => {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isSignInModalOpen, setIsSignInModalOpen] = useState(false)
@@ -30,6 +30,8 @@ export default function Navbar() {
 
   const handleSignInClick = () => setIsSignInModalOpen(true)
   const handleCloseSignInModal = () => setIsSignInModalOpen(false)
+  const handleMobileMenuToggle = () => setIsMobileMenuOpen(!isMobileMenuOpen)
+  const handleMobileMenuClose = () => setIsMobileMenuOpen(false)
 
   return (
     <>
@@ -44,13 +46,13 @@ export default function Navbar() {
           </a>
           <nav className={`navbar-menu${isMobileMenuOpen ? " open" : ""}`} aria-label="Main Navigation">
             <ul className="navbar-links">
-              <li><a href="#home" className="navbar-link" onClick={() => setIsMobileMenuOpen(false)}>Beranda</a></li>
-              <li><a href="#about" className="navbar-link" onClick={() => setIsMobileMenuOpen(false)}>Tentang</a></li>
-              <li><a href="#products" className="navbar-link" onClick={() => setIsMobileMenuOpen(false)}>Produk</a></li>
-              <li><a href="#gallery" className="navbar-link" onClick={() => setIsMobileMenuOpen(false)}>Galeri</a></li>
-              <li><a href="#testimonials" className="navbar-link" onClick={() => setIsMobileMenuOpen(false)}>Testimoni</a></li>
-              <li><a href="#faqs" className="navbar-link" onClick={() => setIsMobileMenuOpen(false)}>FAQ</a></li>
-              <li><a href="#contact" className="navbar-link" onClick={() => setIsMobileMenuOpen(false)}>Kontak</a></li>
+              <li><a href="#home" className="navbar-link" onClick={handleMobileMenuClose}>Beranda</a></li>
+              <li><a href="#about" className="navbar-link" onClick={handleMobileMenuClose}>Tentang</a></li>
+              <li><a href="#products" className="navbar-link" onClick={handleMobileMenuClose}>Produk</a></li>
+              <li><a href="#gallery" className="navbar-link" onClick={handleMobileMenuClose}>Galeri</a></li>
+              <li><a href="#testimonials" className="navbar-link" onClick={handleMobileMenuClose}>Testimoni</a></li>
+              <li><a href="#faqs" className="navbar-link" onClick={handleMobileMenuClose}>FAQ</a></li>
+              <li><a href="#contact" className="navbar-link" onClick={handleMobileMenuClose}>Kontak</a></li>
             </ul>
           </nav>
           <div className="navbar-actions">
@@ -71,14 +73,21 @@ export default function Navbar() {
                 </>
               )}
             </button>
-            <button className={`hamburger${isMobileMenuOpen ? " open" : ""}`} aria-label="Toggle menu" aria-expanded={isMobileMenuOpen} onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+            <button 
+              className={`hamburger${isMobileMenuOpen ? " open" : ""}`} 
+              aria-label="Toggle menu" 
+              aria-expanded={isMobileMenuOpen} 
+              onClick={handleMobileMenuToggle}
+            >
               <span></span><span></span><span></span>
             </button>
           </div>
         </div>
-        {isMobileMenuOpen && <div className="navbar-backdrop" onClick={() => setIsMobileMenuOpen(false)}></div>}
+        {isMobileMenuOpen && <div className="navbar-backdrop" onClick={handleMobileMenuClose}></div>}
       </header>
       <SignInModal isOpen={isSignInModalOpen} onClose={handleCloseSignInModal} />
     </>
   )
 }
+
+export default Navbar
